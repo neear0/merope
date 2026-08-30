@@ -78,25 +78,23 @@ void merope::print_usage() {
         "  --show-prompt      print exactly what is sent to the model\n";
 }
 
-namespace {
-
 // An option name beside the field it fills. One row per option, so adding one
 // is a line rather than another branch.
 template <typename T>
 struct option_t {
-    std::string_view          name;
+    std::string_view             name;
     T merope::cli_arguments_t::* field;
 };
 
 // Flags carry the value they assign, so --no-cache and --confirm live in the
 // same table instead of in two separate runs of branches.
 struct flag_t {
-    std::string_view             name;
+    std::string_view                name;
     bool merope::cli_arguments_t::* field;
-    bool                         value;
+    bool                            value;
 };
 
-constexpr option_t<std::size_t> k_count_options[] = {
+static constexpr option_t<std::size_t> k_count_options[] = {
     {"--workers",     &merope::cli_arguments_t::workers},
     {"--partitions",  &merope::cli_arguments_t::partitions},
     {"--chunk-rows",  &merope::cli_arguments_t::chunk_rows},
@@ -104,12 +102,12 @@ constexpr option_t<std::size_t> k_count_options[] = {
     {"--repeats",     &merope::cli_arguments_t::repeats},
 };
 
-constexpr option_t<std::uint64_t> k_wide_options[] = {
+static constexpr option_t<std::uint64_t> k_wide_options[] = {
     {"--seed", &merope::cli_arguments_t::seed},
     {"--rows", &merope::cli_arguments_t::rows},
 };
 
-constexpr option_t<std::string> k_text_options[] = {
+static constexpr option_t<std::string> k_text_options[] = {
     {"--data",      &merope::cli_arguments_t::data_dir},
     {"--out",       &merope::cli_arguments_t::bench_output},
     {"--suite",     &merope::cli_arguments_t::bench_suites},
@@ -121,15 +119,15 @@ constexpr option_t<std::string> k_text_options[] = {
     {"--ai-config", &merope::cli_arguments_t::ai_config},
 };
 
-constexpr option_t<double>        k_real_options[]    = {{"--corrupt", &merope::cli_arguments_t::corrupt_fraction}};
-constexpr option_t<std::uint16_t> k_port_options[]    = {{"--port", &merope::cli_arguments_t::port}};
-constexpr option_t<int>           k_timeout_options[] = {{"--ai-timeout", &merope::cli_arguments_t::ai_timeout}};
+static constexpr option_t<double>        k_real_options[]    = {{"--corrupt", &merope::cli_arguments_t::corrupt_fraction}};
+static constexpr option_t<std::uint16_t> k_port_options[]    = {{"--port", &merope::cli_arguments_t::port}};
+static constexpr option_t<int>           k_timeout_options[] = {{"--ai-timeout", &merope::cli_arguments_t::ai_timeout}};
 
-constexpr option_t<merope::bad_row_policy_t> k_policy_options[] = {
+static constexpr option_t<merope::bad_row_policy_t> k_policy_options[] = {
     {"--policy", &merope::cli_arguments_t::policy},
 };
 
-constexpr flag_t k_flags[] = {
+static constexpr flag_t k_flags[] = {
     {"--baseline",    &merope::cli_arguments_t::measure_baseline, true},
     {"--confirm",     &merope::cli_arguments_t::confirm,          true},
     {"--no-ai",       &merope::cli_arguments_t::no_ai,            true},
@@ -141,12 +139,11 @@ constexpr flag_t k_flags[] = {
     {"--no-kill",     &merope::cli_arguments_t::allow_kill,       false},
 };
 
-// Consumes the value that follows a valued option. Every one of them needs the
-// same "is there another argument" guard, and doing it here is what removes the
-// fourteen copies of it. A trailing option with no value keeps its default.
+// Holds the "is there another argument" guard once instead of per option.
+// A trailing option with no value keeps its default.
 template <typename T, std::size_t N, typename Parse>
-bool take_value(const option_t<T> (&table)[N], const std::string& argument, int argc, char** argv, int& index,
-                merope::cli_arguments_t& out, Parse parse) {
+static bool take_value(const option_t<T> (&table)[N], const std::string& argument, int argc, char** argv, int& index,
+                       merope::cli_arguments_t& out, Parse parse) {
     for (const option_t<T>& option : table) {
         if (option.name != argument) continue;
         if (index + 1 < argc) out.*option.field = parse(argv[++index]);
@@ -155,14 +152,13 @@ bool take_value(const option_t<T> (&table)[N], const std::string& argument, int 
     return false;
 }
 
-bool take_flag(const std::string& argument, merope::cli_arguments_t& out) {
+static bool take_flag(const std::string& argument, merope::cli_arguments_t& out) {
     for (const flag_t& flag : k_flags) {
         if (flag.name != argument) continue;
         out.*flag.field = flag.value;
         return true;
     }
     return false;
-}
 }
 
 bool merope::parse_arguments(int argc, char** argv, cli_arguments_t& out) {
