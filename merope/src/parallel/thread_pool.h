@@ -1,6 +1,4 @@
 // parallel/thread_pool.h - the projects own worker pool (spec 8).
-// std::thread, mutex, condition_variable and atomics only; no std::async, no
-// third party executor.
 #pragma once
 
 #include <condition_variable>
@@ -30,9 +28,6 @@ public:
     // them; this pool is used for a single flat fan out per query.
     void submit(std::function<void()> task);
 
-    // Blocks until every submitted task has finished. If a task threw, the
-    // first exception is rethrown here so the caller sees a real failure
-    // instead of a silently wrong result.
     void wait_for_all();
 
 private:
@@ -48,4 +43,4 @@ private:
     std::exception_ptr                m_first_error;
 };
 
-} // namespace merope
+}

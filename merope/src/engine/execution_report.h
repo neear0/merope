@@ -9,17 +9,11 @@
 
 namespace merope {
 
-// Peak working set of this process, in bytes. Returns 0 when the platform
-// does not expose it. This counter only ever rises, so it cannot separate one
-// run from the next inside a single process.
 std::uint64_t peak_memory_bytes() noexcept;
 
 // Working set right now, in bytes.
 std::uint64_t current_memory_bytes() noexcept;
 
-// Samples the working set on its own thread so a single run has a peak of its
-// own. The benchmark suite needs this to show that peak memory stays flat as
-// the dataset grows, which the process wide counter cannot demonstrate.
 class c_memory_sampler {
 public:
     explicit c_memory_sampler(unsigned interval_ms = 5);
@@ -75,4 +69,4 @@ std::string format_bytes(std::uint64_t bytes);
 // Thousands-separated integer, e.g. "284,721,932".
 std::string format_count(std::uint64_t value);
 
-} // namespace merope
+}

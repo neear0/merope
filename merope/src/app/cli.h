@@ -1,7 +1,4 @@
 // app/cli.h - the command line front end.
-//
-// Every command goes through app/pipeline.h, the same seam the web layer uses,
-// so the two front ends cannot drift apart.
 #pragma once
 
 #include "../ai/remote_ai_provider.h"
@@ -42,9 +39,6 @@ struct cli_arguments_t {
     // button away for a server meant to outlive the tab.
     bool             allow_kill       = true;
 
-    // Which model answers. The key is deliberately not among these: a command
-    // line ends up in shell history, so it comes from the environment or from
-    // the config file instead.
     std::string      ai_provider;
     std::string      ai_model;
     std::string      ai_base;
@@ -68,9 +62,6 @@ bool parse_arguments(int argc, char** argv, cli_arguments_t& out);
 
 sample_options_t    sample_options_from(const cli_arguments_t& arguments);
 
-// Resolves which provider and model this invocation should use, from the flags
-// above, then the environment, then the config file. Never fails: the mock is
-// always a legitimate answer, and it says so.
 ai_resolution_t     resolve_ai_from(const cli_arguments_t& arguments);
 
 // One line naming the provider, the model and where that decision came from.
@@ -89,4 +80,4 @@ int command_models(const cli_arguments_t& arguments);
 
 int run_self_tests(std::ostream& out);
 
-} // namespace merope
+}

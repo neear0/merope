@@ -1,6 +1,4 @@
 // engine/chunk.h - the columnar batch the engine works on (spec 6.2).
-// Rows are read into column blocks in batches of tens of thousands, processed,
-// reduced into a local result, and dropped. Nothing accumulates per row.
 #pragma once
 
 #include "../core/types.h"
@@ -98,4 +96,4 @@ struct chunk_t {
     bool empty() const noexcept { return row_count == 0; }
 };
 
-} // namespace merope
+}

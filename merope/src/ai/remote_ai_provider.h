@@ -1,14 +1,4 @@
 // ai/remote_ai_provider.h - the production adapter behind c_ai_provider.
-//
-// The rules from ai_provider.h do not change here: the model still never sees
-// the dataset, and it still never produces code. What changes is that the JSON
-// it produces now arrives over the network instead of from a table of keywords,
-// so everything it says is treated as a proposal from an untrusted source:
-// column names that do not exist are dropped, confidences are clamped, and the
-// plan still has to pass the validator before the engine reads a byte.
-//
-// Any model, from any of three wire formats, or from anything that speaks the
-// OpenAI chat shape - Ollama, vLLM, LM Studio, OpenRouter - through --api-base.
 #pragma once
 
 #include "ai_provider.h"
@@ -33,9 +23,6 @@ struct ai_settings_t {
     int         max_output_tokens = 4096;
 };
 
-// What was chosen, and where it came from, so `merope profile` can say which
-// model produced an answer without anyone having to guess. Never holds a key
-// in a form meant for printing: use redact_key for that.
 struct ai_resolution_t {
     ai_settings_t settings;
     std::string   source;        // flags | environment | <config path> | default
@@ -54,10 +41,6 @@ std::string models_endpoint(ai_wire_t wire, const std::string& api_base);
 // The default model per wire, used only when nobody named one.
 const char* default_model(ai_wire_t wire) noexcept;
 
-// Resolution order, strongest first: explicit settings (the command line),
-// then the environment, then the config file, then the mock. A remote provider
-// is never selected without a key: a 401 on every query is a worse outcome
-// than the mock saying plainly that it is the mock.
 ai_resolution_t resolve_ai(const ai_settings_t& requested, const std::string& config_path);
 
 // The config file, which is where a key belongs: not on a command line, where
@@ -90,4 +73,4 @@ std::string redact_key(const std::string& key);
 std::string schema_system_prompt();
 std::string plan_system_prompt();
 
-} // namespace merope
+}

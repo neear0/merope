@@ -71,4 +71,4 @@ std::string cell_to_display(const cell_value_t& value, data_type_t type);
 void         civil_from_days(std::int64_t days, int& year, unsigned& month, unsigned& day) noexcept;
 std::int64_t days_from_civil(int year, unsigned month, unsigned day) noexcept;
 
-} // namespace merope
+}

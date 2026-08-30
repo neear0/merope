@@ -1,9 +1,5 @@
 // schema/heuristic_inference.h - deterministic rules that run before the AI is
 // ever called (spec 4.4).
-//
-// These rules are never the only source of truth. Where the shape of the data
-// and the header label disagree, or where the evidence is thin, the answer is
-// UNKNOWN and the decision moves to the AI proposal and then to the user.
 #pragma once
 
 #include "data_profiler.h"
@@ -24,11 +20,6 @@ struct inference_hint_t {
     double          confidence    = 0.0;
     std::string     rationale;
 
-    // False for a slot nobody actually filled in. The AI adapter allocates one
-    // hint per physical column and only writes the ones the model answered
-    // for, so overlaying a slot it left alone would erase the heuristic result
-    // that is already in the schema and leave the column worse off than
-    // --no-ai. Defaults true: every hint a producer builds by hand is real.
     bool            proposed      = true;
 };
 
@@ -48,4 +39,4 @@ void apply_hints(schema_t& schema, const heuristic_result_t& hints, bool overwri
 
 std::string format_hints(const heuristic_result_t& hints);
 
-} // namespace merope
+}

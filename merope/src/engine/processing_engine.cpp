@@ -9,9 +9,6 @@
 #include <sstream>
 #include <stdexcept>
 
-// Adds with an explicit overflow check. INT64 columns are documented as having
-// no silent range loss, so a sum that cannot be represented must be reported
-// rather than wrapped.
 static bool add_checked(std::int64_t& accumulator, std::int64_t value) noexcept {
     if (value > 0 && accumulator > std::numeric_limits<std::int64_t>::max() - value) return false;
     if (value < 0 && accumulator < std::numeric_limits<std::int64_t>::min() - value) return false;
@@ -474,9 +471,6 @@ merope::query_result_t merope::c_processing_engine::finalise(partial_result_t& c
 merope::query_result_t merope::c_processing_engine::run() {
     using steady_clock_t = std::chrono::steady_clock;
 
-    // A plan that produces neither rows nor aggregates never came out of the
-    // validator in an accepted state. Executing one would quietly return
-    // nonsense, so refuse instead.
     if (m_plan.aggregates.empty() && m_plan.output_slots.empty()) {
         throw std::runtime_error("refusing to execute a plan that was not accepted by the validator");
     }

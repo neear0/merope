@@ -1744,7 +1744,7 @@ boot();
 </html>)MEROPE_UI",
 };
 
-} // namespace
+}
 
 // The whole application: markup, style and behaviour in one document, served
 // from memory. No external font, script or stylesheet is fetched, so the UI
@@ -1761,4 +1761,4 @@ std::string_view ui_document() {
     return document;
 }
 
-} // namespace merope
+}

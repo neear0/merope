@@ -1,8 +1,5 @@
 // plan/plan_compiler.h - the slot table and expression compiler used while
 // validating a plan.
-//
-// Implementation detail of plan_validator.cpp; it has a header only because a
-// class declaration belongs in one. Callers use validate_plan().
 #pragma once
 
 #include "../core/parse.h"
@@ -18,11 +15,6 @@ namespace merope {
 
 inline constexpr slot_index_t k_no_slot = static_cast<slot_index_t>(-1);
 
-// The engine lays a chunk out as [scanned columns][computed columns], so a
-// final slot number is only knowable once compilation has finished and the
-// projection has stopped growing. During compilation the two kinds therefore
-// live in separate numbering spaces, distinguished by this flag, and are
-// rewritten to final positions by remap_slots() at the end.
 inline constexpr slot_index_t k_computed_flag = static_cast<slot_index_t>(1) << 40;
 
 bool is_computed_slot(slot_index_t slot) noexcept;
@@ -76,4 +68,4 @@ private:
     std::vector<std::string>& m_errors;
 };
 
-} // namespace merope
+}

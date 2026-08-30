@@ -54,7 +54,7 @@ std::string trim_trailing_slash(const std::string& text) {
     while (!out.empty() && out.back() == '/') out.pop_back();
     return out;
 }
-} // namespace
+}
 
 merope::ai_wire_t merope::wire_from_string(const std::string& provider) noexcept {
     const std::string name = lower_copy(provider);
@@ -583,9 +583,6 @@ merope::schema_inference_t c_remote_ai_provider::infer_schema(const merope::data
     inference.proposals.hints.resize(profile.columns.size());
     for (std::size_t index = 0; index < profile.columns.size(); ++index) {
         inference.proposals.hints[index].physical_index = profile.columns[index].physical_index;
-        // Unfilled until the model actually answers for this column, so a
-        // truncated or partly rejected reply leaves the heuristic proposal
-        // standing instead of blanking it to UNKNOWN at confidence 0.
         inference.proposals.hints[index].proposed = false;
     }
 
@@ -670,7 +667,7 @@ merope::query_plan_t c_remote_ai_provider::generate_query_plan(const merope::sch
     return plan;
 }
 
-} // namespace
+}
 
 std::unique_ptr<merope::c_ai_provider> merope::make_ai_provider(const ai_settings_t& settings) {
     if (wire_from_string(settings.provider) == ai_wire_t::mock) return make_mock_provider();

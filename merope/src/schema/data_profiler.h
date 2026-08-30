@@ -104,4 +104,4 @@ dataset_profile_t profile_sample(const std::string& dataset_path, const csv_dial
 
 std::string format_profile(const dataset_profile_t& profile);
 
-} // namespace merope
+}

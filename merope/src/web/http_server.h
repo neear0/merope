@@ -1,9 +1,4 @@
 // web/http_server.h - a small HTTP/1.1 server (spec 7).
-//
-// The project takes no third party dependencies, so instead of Crow or Drogon
-// this is a few hundred lines over Winsock, served by the projects own thread
-// pool. It binds to the loopback interface only: the API can open files by
-// path, and that is a capability that has no business on a network socket.
 #pragma once
 
 #include <atomic>
@@ -57,9 +52,6 @@ public:
     // Accept loop. Blocks until stop() is called from another thread.
     void run();
 
-    // Closes the listener, which wakes the blocked accept() and ends run().
-    // Safe to call from a request handler: the connection being served owns its
-    // own socket, so the reply still goes out before run() returns.
     void stop();
 
     bool running() const noexcept { return m_running.load(std::memory_order_relaxed); }
@@ -88,4 +80,4 @@ private:
 // Percent-decoding for path segments and form values.
 std::string url_decode(std::string_view text);
 
-} // namespace merope
+}

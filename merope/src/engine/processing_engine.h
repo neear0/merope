@@ -1,8 +1,4 @@
 // engine/processing_engine.h - executes a validated physical plan (spec 6).
-//
-// Each worker owns one byte range, streams it chunk by chunk, and reduces it
-// into a local partial result. The coordinator merges those partials into the
-// global result. Nothing accumulates per input row outside a group.
 #pragma once
 
 #include "../dataset/csv_reader.h"
@@ -97,4 +93,4 @@ private:
     execution_report_t     m_report;
 };
 
-} // namespace merope
+}

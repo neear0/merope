@@ -27,9 +27,6 @@ struct delimiter_score_t {
     double      score       = 0.0;
 };
 
-// Reads the head of the file and decides delimiter, quoting, encoding, header
-// presence and number formatting. Throws std::runtime_error if the file cannot
-// be opened.
 sniff_result_t sniff_csv(const std::string& path, std::size_t sample_bytes = k_default_sniff_bytes);
 
-} // namespace merope
+}

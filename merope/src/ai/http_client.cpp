@@ -49,7 +49,7 @@ std::string describe_last_error(const std::string& stage) {
     return message;
 }
 
-} // namespace
+}
 
 bool merope::split_url(const std::string& url, std::string& scheme, std::string& host,
                        std::uint16_t& port, std::string& path, std::string& error) {

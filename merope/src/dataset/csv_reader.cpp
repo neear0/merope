@@ -48,9 +48,6 @@ merope::c_record_reader::c_record_reader(const std::string& path, const csv_dial
         start = bom_length(m_dialect.encoding);
     }
 
-    // A partition boundary can land exactly on the first byte of a record. In
-    // that case there is nothing to skip, and skipping anyway would silently
-    // drop one record per partition.
     bool already_aligned = begin == 0;
     if (begin > 0) {
         m_stream.seekg(static_cast<std::streamoff>(begin - 1), std::ios::beg);

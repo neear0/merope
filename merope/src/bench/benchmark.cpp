@@ -30,9 +30,6 @@
 #include <intrin.h>
 #endif
 
-// The workload every performance suite runs. Written as a plan rather than a
-// question so the model is not in the measurement loop: this benchmarks the
-// engine, not the phrasing.
 static const char* k_workload_plan = R"PLAN({"operations":[
   {"type":"project","expr":"year(timestamp)","as":"year"},
   {"type":"filter","predicate":"year == 2025"},
@@ -169,7 +166,7 @@ struct workload_result_t {
     std::size_t   groups        = 0;
 };
 
-} // namespace
+}
 
 // Runs the fixed workload once, measuring this run's own memory peak rather
 // than the process wide counter, which never comes back down.
@@ -218,7 +215,7 @@ struct inference_score_t {
     std::size_t columns           = 0;
 };
 
-} // namespace
+}
 
 // Scores an inferred schema against what the generator actually wrote.
 static inference_score_t score_inference(const merope::schema_t& schema) {
@@ -264,7 +261,7 @@ struct inference_run_t {
     double               milliseconds = 0.0;
 };
 
-} // namespace
+}
 
 static inference_run_t infer_once(const std::string& path, std::size_t sample_rows,
                                   std::uint64_t seed, bool with_ai, bool force_offsets) {

@@ -287,10 +287,6 @@ merope::data_type_t merope::c_expr_compiler::compile_between(expr_t& node) {
     for (std::size_t index = 1; index <= 2; ++index) {
         expr_t& bound = *node.args[index];
         if (compile(bound) == data_type_t::unknown) return data_type_t::unknown;
-        // coerce_literal() waves through anything that is not a literal, so a
-        // column or expression bound needs the same check IN already makes:
-        // otherwise a text subject against an integer bound reaches the
-        // evaluator, which indexes the empty text block of the wrong operand.
         if (bound.kind != expr_kind_t::literal && bound.result_type != subject) {
             m_errors.push_back(std::string("BETWEEN: bound of type ") + to_string(bound.result_type) +
                                " cannot be compared against " + to_string(subject));

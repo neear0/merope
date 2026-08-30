@@ -58,13 +58,10 @@ struct query_plan_t {
     std::vector<operation_t> operations;
 };
 
-// Reads a plan from the JSON the AI returned. Rejects anything it does not
-// understand rather than ignoring it: a silently dropped operation would
-// produce a confidently wrong answer.
 bool parse_query_plan(const json_value_t& root, query_plan_t& out, std::string& error);
 bool parse_query_plan(const std::string& text, query_plan_t& out, std::string& error);
 
 json_value_t plan_to_json(const query_plan_t& plan);
 std::string  format_plan(const query_plan_t& plan);
 
-} // namespace merope
+}

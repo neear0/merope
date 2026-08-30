@@ -1,14 +1,5 @@
 // ai/http_client.h - the only place in the process that opens a connection to
 // something that is not this machine.
-//
-// The web server is Winsock and plaintext because it binds to loopback; a model
-// endpoint is neither, so this is WinHTTP, which brings TLS, the system proxy
-// and the certificate store with it. Like Winsock, it ships with Windows: the
-// project still has no third party dependency.
-//
-// Nothing here knows what a model is. It sends bytes and reports what came
-// back, including the failures, because a request that fails silently against a
-// paid API is worse than one that fails loudly.
 #pragma once
 
 #include <cstdint>
@@ -44,4 +35,4 @@ http_reply_t http_send(const http_call_t& call);
 bool split_url(const std::string& url, std::string& scheme, std::string& host,
                std::uint16_t& port, std::string& path, std::string& error);
 
-} // namespace merope
+}

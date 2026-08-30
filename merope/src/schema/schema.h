@@ -1,6 +1,4 @@
 // schema/schema.h - the unified schema (spec 4.6).
-// Physical layer: what the bytes actually are, and where they sit.
-// Semantic layer: what they mean, proposed by heuristics/AI, owned by the user.
 #pragma once
 
 #include "../core/parse.h"
@@ -37,9 +35,6 @@ struct schema_t {
     csv_dialect_t                dialect;
     std::vector<column_schema_t> columns;
 
-    // Resolves a name used in a query to a physical column index. Semantic
-    // names win over physical ones; both are matched case insensitively.
-    // Returns k_invalid_column when the name is unknown or ambiguous.
     std::size_t index_of(std::string_view name) const noexcept;
 
     const column_schema_t* find(std::string_view name) const noexcept;
@@ -62,4 +57,4 @@ bool load_schema(const std::string& path, schema_t& out, std::string& error);
 
 std::string format_schema_table(const schema_t& schema);
 
-} // namespace merope
+}

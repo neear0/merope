@@ -12,11 +12,6 @@
 #include <memory>
 #include <random>
 
-// A JSON number reaches us as std::int64_t and every field below is a
-// std::size_t bound on how much work or memory a request may cost. Casting a
-// negative value straight across wraps it to a colossal positive one, which
-// removes the bound rather than tightening it: chunk_rows -1 becomes SIZE_MAX
-// and the reader buffers a whole partition. Clamp before the cast, never after.
 static std::size_t clamped_size(std::int64_t value, std::int64_t low, std::int64_t high) noexcept {
     return static_cast<std::size_t>(std::clamp(value, low, high));
 }
@@ -45,9 +40,6 @@ static bool read_json_body(const merope::http_request_t& request, merope::json_v
     return merope::json_parse(request.body, out, error);
 }
 
-// Only requests that really came from this machine are served. Combined with
-// the loopback bind, this blunts DNS rebinding, where a page on some other site
-// resolves a hostname to 127.0.0.1 and then talks to this API.
 static bool host_is_local(const merope::http_request_t& request) {
     std::string host = request.header("Host");
     const std::size_t colon = host.rfind(':');
@@ -58,9 +50,6 @@ static bool host_is_local(const merope::http_request_t& request) {
 }
 
 std::string merope::make_session_token() {
-    // Not a secret worth protecting for long: it exists so that a page on some
-    // other site, which cannot read anything this origin returns, cannot fire
-    // the one endpoint whose effect needs no reply to be useful.
     std::random_device source;
     static const char  k_hex[] = "0123456789abcdef";
 
@@ -90,9 +79,6 @@ bool merope::shutdown_token_matches(const std::string& expected, const std::stri
 merope::ai_settings_t merope::settings_for_request(const web_options_t& options,
                                                    const std::string& model) {
     ai_settings_t settings = options.ai.settings;
-    // The page may name any model the provider serves, but it can never point
-    // the process at a different provider, a different endpoint, or a different
-    // key: those are decided by whoever started the server.
     if (!model.empty() && options.ai.remote) settings.model = model;
     return settings;
 }
@@ -276,9 +262,6 @@ bool merope::resolve_dataset_path(const std::string& root_path, const std::strin
         return false;
     }
 
-    // Compare canonical paths component by component. A string prefix test
-    // would accept "…/data_other" as being inside "…/data", and normalising
-    // first is what stops ".." from walking out.
     auto root_it      = root.begin();
     auto candidate_it = candidate.begin();
     for (; root_it != root.end(); ++root_it, ++candidate_it) {
@@ -719,17 +702,11 @@ void merope::register_api(c_http_server& server, const web_options_t& options) {
         ai.set("source", json_value_t::make_string(settings.ai.source));
         ai.set("note", json_value_t::make_string(settings.ai.note));
         root.set("ai", std::move(ai));
-        // Only the page served from this origin can read this. Nothing here
-        // sends an Access-Control-Allow-Origin, so a script on another site
-        // gets the bytes refused by its own browser.
         root.set("token", json_value_t::make_string(session_token));
         response.headers.emplace_back("Cache-Control", "no-store");
         reply(response, root);
     }));
 
-    // ---- which models this key may use ------------------------------------
-    // Asked of the provider rather than answered from a list in the source: a
-    // hardcoded list of model names is wrong within a month.
     server.route("GET", "/api/models", guarded([settings](const http_request_t&,
                                                           http_response_t& response) {
         json_value_t root = json_value_t::make_object();
@@ -747,10 +724,6 @@ void merope::register_api(c_http_server& server, const web_options_t& options) {
         reply(response, root);
     }));
 
-    // ---- the kill button --------------------------------------------------
-    // The only route that acts on the server rather than on a dataset, so it
-    // carries a guard of its own on top of the loopback bind and the Host
-    // check: without the session token, nothing stops.
     server.route("POST", "/api/shutdown", guarded([settings, session_token, target](
                                                       const http_request_t& request,
                                                       http_response_t& response) {
@@ -759,10 +732,6 @@ void merope::register_api(c_http_server& server, const web_options_t& options) {
             return;
         }
         if (!shutdown_token_matches(session_token, request.header("X-Merope-Token"))) {
-            // A form on another site can post here without reading anything
-            // back, which would be enough to stop the process. It cannot read
-            // the token, and it cannot set a custom header without a preflight
-            // this server never approves.
             reply_error(response, "the session token is missing or wrong", 403);
             return;
         }
@@ -775,10 +744,6 @@ void merope::register_api(c_http_server& server, const web_options_t& options) {
                                 "the engine is stopping; this port will stop answering"));
         reply(response, root);
 
-        // Closes the listener, nothing else. This reply is already written and
-        // will be sent on a socket this thread owns, and run() waits for the
-        // pool before it returns, so the browser is answered before the process
-        // goes away.
         target->stop();
         std::cout << "\nstopped from the web UI\n" << std::flush;
     }));

@@ -1,7 +1,4 @@
 // merope - AI-assisted big data processing engine
-//
-// Command line front end. The web UI described in spec 7 talks to the same
-// pipeline; nothing in app/pipeline.h knows about this file.
 
 #include "app/cli.h"
 #include "app/pipeline.h"

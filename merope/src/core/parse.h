@@ -30,17 +30,6 @@ const char* to_string(date_pattern_t pattern) noexcept;
 
 std::string_view trim(std::string_view text) noexcept;
 
-// Values that stand for "missing". Case insensitive.
-//
-// Two tiers, because the broad set is not safe on a text column: "NA" is the
-// ISO code for Namibia, "None" is a perfectly ordinary status, and "-" is a
-// legitimate string. Treating those as missing silently drops whole groups
-// from a GROUP BY, which is data loss rather than a cosmetic wrong count.
-//
-// `text_column` = false (the default) keeps the broad set, which is what type
-// inference wants: a column of numbers peppered with "-" should still infer as
-// numeric. Pass true once the column is known to hold text, and only the
-// unambiguous markers count.
 bool looks_like_null(std::string_view text, bool text_column = false) noexcept;
 
 bool parse_int64(std::string_view text, const parse_options_t& options, std::int64_t& out) noexcept;
@@ -69,4 +58,4 @@ bool looks_like_percentage(std::string_view text) noexcept;
 bool parse_as(std::string_view text, data_type_t type, const parse_options_t& options,
               std::int64_t& out_int, double& out_real, std::string& out_text) noexcept;
 
-} // namespace merope
+}

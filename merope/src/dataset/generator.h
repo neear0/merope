@@ -50,4 +50,4 @@ const generated_column_t* generated_schema(std::size_t& count) noexcept;
 // Writes transaction_id, user_id, amount, country, timestamp.
 generator_stats_t generate_dataset(const std::string& path, const generator_options_t& options);
 
-} // namespace merope
+}

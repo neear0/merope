@@ -25,9 +25,6 @@ struct inspection_t {
     std::string        cache_path;
 };
 
-// Sniff, sample, profile, apply heuristics and, unless disabled, ask the
-// provider for semantic names. Uses the cached confirmed schema when one exists
-// and `use_cache` is set, which is what keeps the AI from running per query.
 inspection_t inspect_dataset(const std::string& path, const sample_options_t& sample_options,
                              c_ai_provider* provider, bool use_cache);
 
@@ -35,9 +32,6 @@ inspection_t inspect_dataset(const std::string& path, const sample_options_t& sa
 // pressed confirm in the UI" means at this layer.
 bool confirm_and_save(schema_t& schema, std::string& error);
 
-// Lays a previously confirmed schema over a freshly profiled one. The UI needs
-// both at once: the statistics come from this run, the semantic decisions from
-// whatever the user confirmed last time.
 bool overlay_confirmed_schema(schema_t& schema, const std::string& cache_path);
 
 struct query_outcome_t {
@@ -57,4 +51,4 @@ query_outcome_t run_query(const schema_t& schema, c_ai_provider& provider, const
 query_outcome_t run_plan_json(const schema_t& schema, const std::string& plan_json,
                               const execution_options_t& options, std::string& parse_error);
 
-} // namespace merope
+}

@@ -1,6 +1,5 @@
 // plan/expression.h - the expression language the AI is allowed to use inside
 // a plan. Deliberately tiny: comparisons, AND/OR, IN, BETWEEN, IS NULL, a few
-// arithmetic operators and a fixed set of functions. No arbitrary code.
 #pragma once
 
 #include "../core/types.h"
@@ -86,4 +85,4 @@ std::string expression_to_string(const expr_t& expr);
 // Collects every column name the expression reads.
 void collect_columns(const expr_t& expr, std::vector<std::string>& out);
 
-} // namespace merope
+}

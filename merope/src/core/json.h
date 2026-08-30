@@ -1,6 +1,4 @@
 // core/json.h - a small dependency free JSON DOM.
-// The plan the AI returns and the confirmed schema we persist are both JSON,
-// and the project pulls in no third party libraries, so this lives here.
 #pragma once
 
 #include <cstdint>
@@ -60,4 +58,4 @@ bool json_parse(std::string_view text, json_value_t& out, std::string& error);
 // `indent` of 0 produces a single line.
 std::string json_serialize(const json_value_t& value, int indent = 2);
 
-} // namespace merope
+}

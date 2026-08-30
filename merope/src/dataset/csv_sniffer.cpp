@@ -299,12 +299,6 @@ merope::sniff_result_t merope::sniff_csv(const std::string& path, std::size_t sa
         result.notes.push_back("header: no typed column to contrast against, used label uniqueness");
     }
 
-    // 6. Physical column names. The engine addresses columns by index; these
-    //    names are for humans and for the AI prompt.
-    // The modal count from the delimiter histogram is the trustworthy one: it
-    // is the agreement of up to k_scored_lines records, where first.size() is a
-    // single line that a trailing delimiter is enough to make one field too
-    // wide. Only fall back to it when the histogram found nothing at all.
     if (dialect.column_count == 0) dialect.column_count = std::max<std::size_t>(first.size(), 1);
     dialect.column_names.clear();
     std::set<std::string> taken;
@@ -313,10 +307,6 @@ merope::sniff_result_t merope::sniff_csv(const std::string& path, std::size_t sa
                                ? std::string(trim(first[column]))
                                : std::string();
         if (name.empty()) name = "column_" + std::to_string(column);
-        // Duplicate header labels would break name based lookup, so they get
-        // suffixed. The suffix is checked against the names already taken, not
-        // just against the original labels: counting collisions on the raw name
-        // alone turns a,a,a into a, a_2, a_2 and leaves both unaddressable.
         if (taken.count(name) != 0) {
             const std::string base = name;
             std::size_t       next = 2;

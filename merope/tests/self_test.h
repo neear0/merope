@@ -1,7 +1,4 @@
 // tests/self_test.h - declarations for the built in check suite.
-//
-// The suite is one translation unit; these live in a header so that self_test.cpp
-// can hold definitions only, and so the bodies keep namespace lookup.
 #pragma once
 
 #include <cstdint>
@@ -36,4 +33,4 @@ void test_web_guards(const std::filesystem::path& directory);
 void test_ai_layer(const std::filesystem::path& directory);
 void test_end_to_end(const std::filesystem::path& directory);
 
-} // namespace merope
+}

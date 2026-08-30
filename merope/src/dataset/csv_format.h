@@ -39,9 +39,6 @@ enum class record_status_t : std::uint8_t {
     end          // nothing left in the buffer
 };
 
-// Splits one record out of `buffer` starting at `cursor`, honouring quotes and
-// doubled quote escapes. On success `cursor` is advanced past the record
-// terminator. `fields` is reused to avoid per row allocation.
 record_status_t parse_record(std::string_view buffer, std::size_t& cursor,
                              const csv_dialect_t& dialect,
                              std::vector<std::string>& fields);
@@ -49,4 +46,4 @@ record_status_t parse_record(std::string_view buffer, std::size_t& cursor,
 // Convenience wrapper for a single in-memory line.
 std::vector<std::string> split_line(std::string_view line, const csv_dialect_t& dialect);
 
-} // namespace merope
+}

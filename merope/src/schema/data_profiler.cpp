@@ -69,10 +69,6 @@ merope::dataset_profile_t merope::profile_sample(const std::string& dataset_path
             const std::string_view field = trim(row[column]);
             ++stats.row_count;
 
-            // Broad tier on purpose: this pass runs before the type is known,
-            // and it is the pass the type is inferred from. A numeric column
-            // peppered with "-" has to keep inferring as numeric. The narrow
-            // tier applies from the second pass on, once inferred_type exists.
             if (looks_like_null(field)) {
                 ++stats.null_count;
                 continue;

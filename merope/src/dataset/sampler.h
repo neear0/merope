@@ -1,10 +1,5 @@
 // dataset/sampler.h - takes a representative sample without reading the whole
 // file (spec 4.2).
-//
-// The first N rows are never enough: logs and sorted exports make min, max and
-// unique ratio lie. So the sample is always the head block (needed for format)
-// plus either a reservoir over a full scan, or rows drawn from random offsets
-// snapped to line boundaries.
 #pragma once
 
 #include "csv_format.h"
@@ -49,4 +44,4 @@ struct sample_t {
 sample_t sample_dataset(const std::string& path, const csv_dialect_t& dialect,
                         const sample_options_t& options = {});
 
-} // namespace merope
+}

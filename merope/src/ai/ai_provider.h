@@ -1,9 +1,4 @@
 // ai/ai_provider.h - the only place the engine talks to a model (spec 8.1).
-//
-// Two hard rules hold on both sides of this interface:
-//   - the model never sees the dataset, only a profile and sample values;
-//   - the model never produces code, only a declarative plan that the
-//     validator then has to accept before anything executes.
 #pragma once
 
 #include "../plan/query_plan.h"
@@ -41,9 +36,6 @@ public:
     virtual ~c_ai_provider() = default;
 };
 
-// Builds the prompt payload a real adapter would send: the profile and a few
-// representative values per column, never the dataset itself. Exposed here so
-// that what leaves the process is inspectable and testable.
 std::string build_schema_prompt(const dataset_profile_t& profile);
 std::string build_plan_prompt(const schema_t& schema, const std::string& query);
 
@@ -51,4 +43,4 @@ std::string build_plan_prompt(const schema_t& schema, const std::string& query);
 // interface against a real model and lives outside the engine.
 std::unique_ptr<c_ai_provider> make_mock_provider();
 
-} // namespace merope
+}

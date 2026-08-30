@@ -1,9 +1,4 @@
 // plan/plan_validator.h - the gate between the AI and the engine (spec 3.1, 5).
-//
-// The AI produces a logical plan as JSON. Nothing from it reaches the engine
-// until this stage has resolved every column against the confirmed schema,
-// checked that every operation makes sense for the types involved, and
-// canonicalised the result into a physical plan the engine can execute.
 #pragma once
 
 #include "../schema/schema.h"
@@ -93,4 +88,4 @@ validation_result_t validate_plan(const query_plan_t& logical, const schema_t& s
 
 std::string format_physical_plan(const physical_plan_t& plan, const schema_t& schema);
 
-} // namespace merope
+}

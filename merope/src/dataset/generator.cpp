@@ -67,10 +67,6 @@ merope::generator_stats_t merope::generate_dataset(const std::string& path, cons
         buffer += scratch;
 
         if (corrupt) {
-            // A truncated record: the right shape for the first few fields, then
-            // it simply stops. Breaking the row arity rather than one value keeps
-            // the corruption from skewing type inference for the column, so this
-            // exercises the bad row policy and not the profiler.
             buffer += '\n';
             ++stats.corrupted_rows;
         } else {
@@ -89,10 +85,6 @@ merope::generator_stats_t merope::generate_dataset(const std::string& path, cons
             buffer += scratch;
             buffer += '\n';
 
-            // The generator records the exact answers so a test can compare
-            // against them instead of against another run of the engine, and so
-            // the benchmark can score inference against known truth. A corrupt
-            // row never reaches the engine, so it never contributes.
             const std::int64_t scaled = amount_cents * (k_money_factor / 100);
             if (!seen_amount) {
                 stats.min_amount_scaled = stats.max_amount_scaled = scaled;
@@ -124,9 +116,6 @@ merope::generator_stats_t merope::generate_dataset(const std::string& path, cons
 }
 
 
-// What the generator writes, in physical order. The benchmark scores inferred
-// schemas against this, so accuracy is measured against the data rather than
-// against another run of the inference.
 static constexpr merope::generated_column_t k_generated_schema[] = {
     {"transaction_id", "INT64",       "IDENTIFIER"},
     {"user_id",        "INT64",       "IDENTIFIER"},

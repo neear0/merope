@@ -12,9 +12,6 @@ merope::partition_plan_t merope::plan_partitions(std::uint64_t file_size, const 
     }
 
     if (dialect.quoted_newlines) {
-        // A newline inside a quoted field is indistinguishable from a record
-        // terminator when you start reading from an arbitrary offset. Refusing
-        // to partition is the only correct answer.
         plan.partitions.push_back(partition_t{0, file_size});
         plan.note = "single partition: quoted fields contain newlines";
         return plan;

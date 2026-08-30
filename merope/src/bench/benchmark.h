@@ -1,14 +1,4 @@
 // bench/benchmark.h - the experimental part of the specification (chapter 12).
-//
-// Five suites, each writing one CSV plus a shared manifest recording the seed,
-// the provider, the build and the machine, because a measurement nobody can
-// reproduce is not a measurement.
-//
-//   inference  12.1  heuristics vs heuristics+AI, and the effect of sampling method
-//   sampling   12.2  sample size 100 .. 100k, and how stable the estimates get
-//   threads    12.3  1 .. 32 workers: time, speedup, efficiency, throughput
-//   scaling    12.4  1 .. 50 GB: does peak memory stay flat as the file grows
-//   baseline   12.5  the same workload on DuckDB or Polars
 #pragma once
 
 #include <cstdint>
@@ -49,4 +39,4 @@ std::string    describe_build();
 int run_benchmarks(const bench_options_t& options, const std::vector<std::string>& suites,
                    std::ostream& log);
 
-} // namespace merope
+}

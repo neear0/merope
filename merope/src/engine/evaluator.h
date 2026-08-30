@@ -39,4 +39,4 @@ private:
     std::size_t                                  m_used = 0;
 };
 
-} // namespace merope
+}

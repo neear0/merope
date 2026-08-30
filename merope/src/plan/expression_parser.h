@@ -1,8 +1,5 @@
 // plan/expression_parser.h - the lexer and recursive descent parser behind
 // parse_expression().
-//
-// Implementation detail of expression.cpp; it has a header only because a class
-// declaration belongs in one. Callers use parse_expression().
 #pragma once
 
 #include "expression.h"
@@ -44,15 +41,8 @@ public:
     expr_ptr run();
 
 private:
-    // The grammar is recursive descent, so nesting depth is stack depth and a
-    // few thousand '(' would overflow it. A stack overflow is not a catchable
-    // std::exception, so the API's try/catch could not turn it into a 500 --
-    // the process would simply die. The JSON parser guards itself the same way.
     static constexpr std::size_t k_max_depth = 64;
 
-    // Taken in the three functions every unbounded recursion path goes through:
-    // parse_or (re-entered by a parenthesised group) and the two that recurse
-    // into themselves directly.
     class c_depth_guard {
     public:
         explicit c_depth_guard(std::size_t& depth) noexcept : m_depth(depth) { ++m_depth; }
@@ -85,4 +75,4 @@ private:
     std::size_t          m_depth  = 0;
 };
 
-} // namespace merope
+}

@@ -152,9 +152,6 @@ bool merope::load_schema(const std::string& path, schema_t& out, std::string& er
         out.dialect.has_header        = dialect->bool_or("has_header", false);
         out.dialect.quoted_newlines   = dialect->bool_or("quoted_newlines", false);
         out.dialect.column_count      = static_cast<std::size_t>(dialect->int_or("column_count", 0));
-        // save_schema() writes this, so it has to be read back: without it a
-        // confirmed windows-1250 file silently reloads as UTF-8 and every
-        // transcoded group key turns to mojibake on the cached path.
         if (encoding_t encoding = encoding_t::utf8;
             encoding_from_string(dialect->string_or("encoding", ""), encoding)) {
             out.dialect.encoding = encoding;

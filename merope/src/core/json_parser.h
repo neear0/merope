@@ -1,7 +1,4 @@
 // core/json_parser.h - the recursive descent parser behind json_parse().
-//
-// It is an implementation detail of json.cpp and has its own header only
-// because a class declaration belongs in one. Callers use json_parse().
 #pragma once
 
 #include "json.h"
@@ -37,4 +34,4 @@ private:
     std::size_t      m_cursor = 0;
 };
 
-} // namespace merope
+}

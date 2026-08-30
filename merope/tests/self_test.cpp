@@ -1,8 +1,4 @@
 // tests/self_test.cpp - the built in checks behind `merope selftest`.
-//
-// The point of most of these is that the expected answer is known independently
-// of the engine: the generator records the exact totals it wrote, so a passing
-// aggregation test means the engine agrees with the data, not with itself.
 
 #include "self_test.h"
 
@@ -598,9 +594,6 @@ void merope::test_web_guards(const std::filesystem::path& directory) {
           "a file that does not exist is refused");
     check(!resolve_dataset_path(root.string(), ".", resolved, error), "a directory is not a dataset");
 
-    // The kill button ends the process, and a form on another site can post to
-    // this origin without being able to read anything back. The session token
-    // is what separates the page this server sent from that form.
     const std::string token = make_session_token();
     check(token.size() == 32, "a session token is 128 bits of hex");
     check(token != make_session_token(), "two sessions do not share a token");
