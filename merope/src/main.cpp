@@ -13,6 +13,7 @@
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <string_view>
 #include <vector>
 
 
@@ -77,69 +78,124 @@ void merope::print_usage() {
         "  --show-prompt      print exactly what is sent to the model\n";
 }
 
+namespace {
+
+// An option name beside the field it fills. One row per option, so adding one
+// is a line rather than another branch.
+template <typename T>
+struct option_t {
+    std::string_view          name;
+    T merope::cli_arguments_t::* field;
+};
+
+// Flags carry the value they assign, so --no-cache and --confirm live in the
+// same table instead of in two separate runs of branches.
+struct flag_t {
+    std::string_view             name;
+    bool merope::cli_arguments_t::* field;
+    bool                         value;
+};
+
+constexpr option_t<std::size_t> k_count_options[] = {
+    {"--workers",     &merope::cli_arguments_t::workers},
+    {"--partitions",  &merope::cli_arguments_t::partitions},
+    {"--chunk-rows",  &merope::cli_arguments_t::chunk_rows},
+    {"--sample-rows", &merope::cli_arguments_t::sample_rows},
+    {"--repeats",     &merope::cli_arguments_t::repeats},
+};
+
+constexpr option_t<std::uint64_t> k_wide_options[] = {
+    {"--seed", &merope::cli_arguments_t::seed},
+    {"--rows", &merope::cli_arguments_t::rows},
+};
+
+constexpr option_t<std::string> k_text_options[] = {
+    {"--data",      &merope::cli_arguments_t::data_dir},
+    {"--out",       &merope::cli_arguments_t::bench_output},
+    {"--suite",     &merope::cli_arguments_t::bench_suites},
+    {"--sizes",     &merope::cli_arguments_t::scale_sizes},
+    {"--threads",   &merope::cli_arguments_t::thread_list},
+    {"--provider",  &merope::cli_arguments_t::ai_provider},
+    {"--model",     &merope::cli_arguments_t::ai_model},
+    {"--api-base",  &merope::cli_arguments_t::ai_base},
+    {"--ai-config", &merope::cli_arguments_t::ai_config},
+};
+
+constexpr option_t<double>        k_real_options[]    = {{"--corrupt", &merope::cli_arguments_t::corrupt_fraction}};
+constexpr option_t<std::uint16_t> k_port_options[]    = {{"--port", &merope::cli_arguments_t::port}};
+constexpr option_t<int>           k_timeout_options[] = {{"--ai-timeout", &merope::cli_arguments_t::ai_timeout}};
+
+constexpr option_t<merope::bad_row_policy_t> k_policy_options[] = {
+    {"--policy", &merope::cli_arguments_t::policy},
+};
+
+constexpr flag_t k_flags[] = {
+    {"--baseline",    &merope::cli_arguments_t::measure_baseline, true},
+    {"--confirm",     &merope::cli_arguments_t::confirm,          true},
+    {"--no-ai",       &merope::cli_arguments_t::no_ai,            true},
+    {"--show-prompt", &merope::cli_arguments_t::show_prompt,      true},
+    {"--keep",        &merope::cli_arguments_t::keep_datasets,    true},
+    {"--no-cache",    &merope::cli_arguments_t::use_cache,        false},
+    {"--no-header",   &merope::cli_arguments_t::write_header,     false},
+    {"--no-open",     &merope::cli_arguments_t::open_browser,     false},
+    {"--no-kill",     &merope::cli_arguments_t::allow_kill,       false},
+};
+
+// Consumes the value that follows a valued option. Every one of them needs the
+// same "is there another argument" guard, and doing it here is what removes the
+// fourteen copies of it. A trailing option with no value keeps its default.
+template <typename T, std::size_t N, typename Parse>
+bool take_value(const option_t<T> (&table)[N], const std::string& argument, int argc, char** argv, int& index,
+                merope::cli_arguments_t& out, Parse parse) {
+    for (const option_t<T>& option : table) {
+        if (option.name != argument) continue;
+        if (index + 1 < argc) out.*option.field = parse(argv[++index]);
+        return true;
+    }
+    return false;
+}
+
+bool take_flag(const std::string& argument, merope::cli_arguments_t& out) {
+    for (const flag_t& flag : k_flags) {
+        if (flag.name != argument) continue;
+        out.*flag.field = flag.value;
+        return true;
+    }
+    return false;
+}
+}
+
 bool merope::parse_arguments(int argc, char** argv, cli_arguments_t& out) {
     if (argc < 2) return false;
     out.command = argv[1];
     if (out.command == "--help" || out.command == "-h" || out.command == "help") return false;
 
+    const auto as_count   = [](const char* text) { return static_cast<std::size_t>(std::atoll(text)); };
+    const auto as_wide    = [](const char* text) { return static_cast<std::uint64_t>(std::atoll(text)); };
+    const auto as_text    = [](const char* text) { return std::string(text); };
+    const auto as_real    = [](const char* text) { return std::atof(text); };
+    const auto as_port    = [](const char* text) { return static_cast<std::uint16_t>(std::atoi(text)); };
+    const auto as_int     = [](const char* text) { return std::atoi(text); };
+    const auto as_policy  = [](const char* text) { return bad_row_policy_from_string(text); };
+
     for (int index = 2; index < argc; ++index) {
         const std::string argument = argv[index];
-        auto value_of = [&](std::size_t& target) {
-            if (index + 1 < argc) target = static_cast<std::size_t>(std::atoll(argv[++index]));
-        };
 
-        if (argument == "--workers")           value_of(out.workers);
-        else if (argument == "--partitions")   value_of(out.partitions);
-        else if (argument == "--chunk-rows")   value_of(out.chunk_rows);
-        else if (argument == "--sample-rows")  value_of(out.sample_rows);
-        else if (argument == "--seed") {
-            if (index + 1 < argc) out.seed = static_cast<std::uint64_t>(std::atoll(argv[++index]));
-        } else if (argument == "--rows") {
-            if (index + 1 < argc) out.rows = static_cast<std::uint64_t>(std::atoll(argv[++index]));
-        } else if (argument == "--corrupt") {
-            if (index + 1 < argc) out.corrupt_fraction = std::atof(argv[++index]);
-        } else if (argument == "--policy") {
-            if (index + 1 < argc) out.policy = bad_row_policy_from_string(argv[++index]);
-        } else if (argument == "--port") {
-            if (index + 1 < argc) out.port = static_cast<std::uint16_t>(std::atoi(argv[++index]));
-        } else if (argument == "--data") {
-            if (index + 1 < argc) out.data_dir = argv[++index];
-        } else if (argument == "--out") {
-            if (index + 1 < argc) out.bench_output = argv[++index];
-        } else if (argument == "--suite") {
-            if (index + 1 < argc) out.bench_suites = argv[++index];
-        } else if (argument == "--sizes") {
-            if (index + 1 < argc) out.scale_sizes = argv[++index];
-        } else if (argument == "--threads") {
-            if (index + 1 < argc) out.thread_list = argv[++index];
-        } else if (argument == "--repeats")    value_of(out.repeats);
-        else if (argument == "--keep")         out.keep_datasets = true;
-        else if (argument == "--no-open")      out.open_browser = false;
-        else if (argument == "--no-kill")      out.allow_kill = false;
-        else if (argument == "--provider") {
-            if (index + 1 < argc) out.ai_provider = argv[++index];
-        } else if (argument == "--model") {
-            if (index + 1 < argc) out.ai_model = argv[++index];
-        } else if (argument == "--api-base") {
-            if (index + 1 < argc) out.ai_base = argv[++index];
-        } else if (argument == "--ai-config") {
-            if (index + 1 < argc) out.ai_config = argv[++index];
-        } else if (argument == "--ai-timeout") {
-            if (index + 1 < argc) out.ai_timeout = std::atoi(argv[++index]);
-        }
-        else if (argument == "--baseline")     out.measure_baseline = true;
-        else if (argument == "--no-cache")     out.use_cache = false;
-        else if (argument == "--confirm")      out.confirm = true;
-        else if (argument == "--no-ai")        out.no_ai = true;
-        else if (argument == "--show-prompt")  out.show_prompt = true;
-        else if (argument == "--no-header")    out.write_header = false;
-        else if (argument == "--help" || argument == "-h") return false;
-        else if (argument.rfind("--", 0) == 0) {
+        if (take_value(k_count_options, argument, argc, argv, index, out, as_count))     continue;
+        if (take_value(k_wide_options, argument, argc, argv, index, out, as_wide))       continue;
+        if (take_value(k_text_options, argument, argc, argv, index, out, as_text))       continue;
+        if (take_value(k_real_options, argument, argc, argv, index, out, as_real))       continue;
+        if (take_value(k_port_options, argument, argc, argv, index, out, as_port))       continue;
+        if (take_value(k_timeout_options, argument, argc, argv, index, out, as_int))     continue;
+        if (take_value(k_policy_options, argument, argc, argv, index, out, as_policy))   continue;
+        if (take_flag(argument, out))                                                    continue;
+
+        if (argument == "--help" || argument == "-h") return false;
+        if (argument.rfind("--", 0) == 0) {
             std::cerr << "unknown option: " << argument << "\n";
             return false;
-        } else {
-            out.positional.push_back(argument);
         }
+        out.positional.push_back(argument);
     }
     return true;
 }
