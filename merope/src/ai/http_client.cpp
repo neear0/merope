@@ -13,7 +13,6 @@
 #include <cstdlib>
 #include <memory>
 
-namespace {
 
 // Every WinHTTP handle is closed by the same deleter, so an early return can
 // never leak one. There is no naked close in this file.
@@ -24,7 +23,7 @@ struct winhttp_closer_t {
 };
 using winhttp_handle_t = std::unique_ptr<void, winhttp_closer_t>;
 
-std::wstring widen(const std::string& text) {
+static std::wstring widen(const std::string& text) {
     if (text.empty()) return std::wstring();
     const int needed = MultiByteToWideChar(CP_UTF8, 0, text.c_str(),
                                            static_cast<int>(text.size()), nullptr, 0);
@@ -35,7 +34,7 @@ std::wstring widen(const std::string& text) {
     return wide;
 }
 
-std::string describe_last_error(const std::string& stage) {
+static std::string describe_last_error(const std::string& stage) {
     const DWORD code = GetLastError();
     std::string message = stage + " failed (WinHTTP error " + std::to_string(code) + ")";
     switch (code) {
@@ -47,8 +46,6 @@ std::string describe_last_error(const std::string& stage) {
     default: break;
     }
     return message;
-}
-
 }
 
 bool merope::split_url(const std::string& url, std::string& scheme, std::string& host,

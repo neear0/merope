@@ -155,7 +155,6 @@ std::string merope::describe_build() {
 
 // --------------------------------------------------------------- plumbing ---
 
-namespace {
 
 struct workload_result_t {
     double        seconds       = 0.0;
@@ -166,7 +165,6 @@ struct workload_result_t {
     std::size_t   groups        = 0;
 };
 
-}
 
 // Runs the fixed workload once, measuring this run's own memory peak rather
 // than the process wide counter, which never comes back down.
@@ -205,7 +203,6 @@ static workload_result_t run_workload(const merope::schema_t& schema, std::size_
     return out;
 }
 
-namespace {
 
 struct inference_score_t {
     double      type_accuracy     = 0.0;
@@ -215,7 +212,6 @@ struct inference_score_t {
     std::size_t columns           = 0;
 };
 
-}
 
 // Scores an inferred schema against what the generator actually wrote.
 static inference_score_t score_inference(const merope::schema_t& schema) {
@@ -253,7 +249,6 @@ static inference_score_t score_inference(const merope::schema_t& schema) {
     return score;
 }
 
-namespace {
 
 struct inference_run_t {
     merope::inspection_t inspection;
@@ -261,7 +256,6 @@ struct inference_run_t {
     double               milliseconds = 0.0;
 };
 
-}
 
 static inference_run_t infer_once(const std::string& path, std::size_t sample_rows,
                                   std::uint64_t seed, bool with_ai, bool force_offsets) {

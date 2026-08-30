@@ -11,16 +11,15 @@
 #include <sstream>
 #include <stdexcept>
 
-namespace {
 
-std::string lower_copy(std::string_view text) {
+static std::string lower_copy(std::string_view text) {
     std::string out(text);
     std::transform(out.begin(), out.end(), out.begin(),
                    [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
     return out;
 }
 
-std::string trim_copy(const std::string& text) {
+static std::string trim_copy(const std::string& text) {
     std::size_t begin = 0;
     std::size_t end   = text.size();
     while (begin < end && std::isspace(static_cast<unsigned char>(text[begin])) != 0) ++begin;
@@ -30,7 +29,7 @@ std::string trim_copy(const std::string& text) {
 
 // Reads an environment variable without the CRT deprecation warning, and
 // without leaving the value in a static buffer somebody else can overwrite.
-std::string environment(const char* name) {
+static std::string environment(const char* name) {
     std::size_t size  = 0;
     char*       value = nullptr;
     if (_dupenv_s(&value, &size, name) != 0 || value == nullptr) return std::string();
@@ -41,7 +40,7 @@ std::string environment(const char* name) {
 
 // The first non empty of a list of environment variables, so a machine that
 // already has GEMINI_API_KEY set for something else does not need a second one.
-std::string first_environment(std::initializer_list<const char*> names) {
+static std::string first_environment(std::initializer_list<const char*> names) {
     for (const char* name : names) {
         const std::string value = environment(name);
         if (!value.empty()) return value;
@@ -49,11 +48,10 @@ std::string first_environment(std::initializer_list<const char*> names) {
     return std::string();
 }
 
-std::string trim_trailing_slash(const std::string& text) {
+static std::string trim_trailing_slash(const std::string& text) {
     std::string out = text;
     while (!out.empty() && out.back() == '/') out.pop_back();
     return out;
-}
 }
 
 merope::ai_wire_t merope::wire_from_string(const std::string& provider) noexcept {
@@ -496,7 +494,6 @@ merope::ai_resolution_t merope::resolve_ai(const ai_settings_t& requested,
 
 // -------------------------------------------------------------- provider ----
 
-namespace {
 
 class c_remote_ai_provider final : public merope::c_ai_provider {
 public:
@@ -667,7 +664,6 @@ merope::query_plan_t c_remote_ai_provider::generate_query_plan(const merope::sch
     return plan;
 }
 
-}
 
 std::unique_ptr<merope::c_ai_provider> merope::make_ai_provider(const ai_settings_t& settings) {
     if (wire_from_string(settings.provider) == ai_wire_t::mock) return make_mock_provider();

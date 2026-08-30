@@ -46,12 +46,9 @@ $out = New-Object System.Text.StringBuilder
 
 #include <string>
 
-namespace merope {
-namespace {
-
 // The document is held in pieces purely because MSVC caps a single string
 // literal at 16 KB. They are joined once, on first use.
-constexpr std::string_view k_parts[] = {
+static constexpr std::string_view k_parts[] = {
 '@)
 [void]$out.Append("`n")
 foreach ($chunk in $chunks) {
@@ -63,12 +60,9 @@ foreach ($chunk in $chunks) {
 [void]$out.Append(@'
 };
 
-}
-
-// The whole application: markup, style and behaviour in one document, served
-// from memory. No external font, script or stylesheet is fetched, so the UI
-// works on a machine with no network at all.
-std::string_view ui_document() {
+// The whole application in one document, served from memory. No external font,
+// script or stylesheet is fetched, so the UI works with no network at all.
+std::string_view merope::ui_document() {
     static const std::string document = [] {
         std::string joined;
         std::size_t total = 0;
@@ -78,8 +72,6 @@ std::string_view ui_document() {
         return joined;
     }();
     return document;
-}
-
 }
 '@)
 
