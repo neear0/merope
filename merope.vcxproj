@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Sanitize|x64">
+      <Configuration>Sanitize</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>17.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{149fb12e-d5d5-4fc0-8d60-0de157bd4794}</ProjectGuid>
+    <RootNamespace>merope</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)'=='Debug'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)'=='Release'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <!-- Address and undefined behaviour checking, the equivalent of the ASan/UBSan
+       target the specification asks for. Run the self test under this one. -->
+  <PropertyGroup Condition="'$(Configuration)'=='Sanitize'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <!-- Settings shared by every configuration. C++20, warnings as errors and
+       UTF-8 sources are project wide requirements, not per configuration taste. -->
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <WarningLevel>Level4</WarningLevel>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <ConformanceMode>true</ConformanceMode>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)'=='Debug'">
+    <ClCompile>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;MEROPE_BUILD_CONFIG="Debug";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)'=='Release'">
+    <ClCompile>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;MEROPE_BUILD_CONFIG="Release";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)'=='Sanitize'">
+    <ClCompile>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <EnableASAN>true</EnableASAN>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <!-- Edit-and-continue debug info is incompatible with /fsanitize=address. -->
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="merope\src\main.cpp" />
+    <ClCompile Include="merope\src\ai\mock_ai_provider.cpp" />
+    <ClCompile Include="merope\src\ai\http_client.cpp" />
+    <ClCompile Include="merope\src\ai\remote_ai_provider.cpp" />
+    <ClCompile Include="merope\src\app\pipeline.cpp" />
+    <ClCompile Include="merope\src\bench\benchmark.cpp" />
+    <ClCompile Include="merope\src\core\json.cpp" />
+    <ClCompile Include="merope\src\core\parse.cpp" />
+    <ClCompile Include="merope\src\core\types.cpp" />
+    <ClCompile Include="merope\src\dataset\csv_format.cpp" />
+    <ClCompile Include="merope\src\dataset\csv_reader.cpp" />
+    <ClCompile Include="merope\src\dataset\csv_sniffer.cpp" />
+    <ClCompile Include="merope\src\dataset\encoding.cpp" />
+    <ClCompile Include="merope\src\dataset\generator.cpp" />
+    <ClCompile Include="merope\src\dataset\sampler.cpp" />
+    <ClCompile Include="merope\src\engine\evaluator.cpp" />
+    <ClCompile Include="merope\src\engine\execution_report.cpp" />
+    <ClCompile Include="merope\src\engine\processing_engine.cpp" />
+    <ClCompile Include="merope\src\parallel\partitioner.cpp" />
+    <ClCompile Include="merope\src\parallel\thread_pool.cpp" />
+    <ClCompile Include="merope\src\plan\expression.cpp" />
+    <ClCompile Include="merope\src\plan\plan_validator.cpp" />
+    <ClCompile Include="merope\src\plan\query_plan.cpp" />
+    <ClCompile Include="merope\src\schema\data_profiler.cpp" />
+    <ClCompile Include="merope\src\schema\heuristic_inference.cpp" />
+    <ClCompile Include="merope\src\schema\schema.cpp" />
+    <ClCompile Include="merope\src\web\api.cpp" />
+    <ClCompile Include="merope\src\web\http_server.cpp" />
+    <ClCompile Include="merope\src\web\ui_assets.cpp" />
+    <ClCompile Include="merope\tests\self_test.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="merope\src\ai\ai_provider.h" />
+    <ClInclude Include="merope\src\ai\mock_ai_provider.h" />
+    <ClInclude Include="merope\src\ai\http_client.h" />
+    <ClInclude Include="merope\src\ai\remote_ai_provider.h" />
+    <ClInclude Include="merope\src\app\pipeline.h" />
+    <ClInclude Include="merope\src\bench\benchmark.h" />
+    <ClInclude Include="merope\src\app\cli.h" />
+    <ClInclude Include="merope\src\core\json.h" />
+    <ClInclude Include="merope\src\core\json_parser.h" />
+    <ClInclude Include="merope\src\core\parse.h" />
+    <ClInclude Include="merope\src\core\types.h" />
+    <ClInclude Include="merope\src\dataset\csv_format.h" />
+    <ClInclude Include="merope\src\dataset\csv_reader.h" />
+    <ClInclude Include="merope\src\dataset\csv_sniffer.h" />
+    <ClInclude Include="merope\src\dataset\encoding.h" />
+    <ClInclude Include="merope\src\dataset\generator.h" />
+    <ClInclude Include="merope\src\dataset\sampler.h" />
+    <ClInclude Include="merope\src\engine\chunk.h" />
+    <ClInclude Include="merope\src\engine\evaluator.h" />
+    <ClInclude Include="merope\src\engine\execution_report.h" />
+    <ClInclude Include="merope\src\engine\processing_engine.h" />
+    <ClInclude Include="merope\src\parallel\partitioner.h" />
+    <ClInclude Include="merope\src\parallel\thread_pool.h" />
+    <ClInclude Include="merope\src\plan\expression.h" />
+    <ClInclude Include="merope\src\plan\expression_parser.h" />
+    <ClInclude Include="merope\src\plan\plan_validator.h" />
+    <ClInclude Include="merope\src\plan\plan_compiler.h" />
+    <ClInclude Include="merope\src\plan\query_plan.h" />
+    <ClInclude Include="merope\src\schema\data_profiler.h" />
+    <ClInclude Include="merope\src\schema\heuristic_inference.h" />
+    <ClInclude Include="merope\src\schema\schema.h" />
+    <ClInclude Include="merope\src\web\api.h" />
+    <ClInclude Include="merope\src\web\http_server.h" />
+    <ClInclude Include="merope\src\web\ui_assets.h" />
+    <ClInclude Include="merope\tests\self_test.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="README.md" />
+    <None Include="secrets.md" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

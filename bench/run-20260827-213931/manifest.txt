@@ -1,0 +1,30 @@
+merope benchmark run
+====================
+
+when            20260827-213949
+suites          inference, sampling
+sample seed     20260101
+repeats         1
+ai provider     mock (deterministic; no model version to record)
+build           MSVC 194435221, _MSVC_LANG=202002, NDEBUG, config=Release (flags are in merope.vcxproj)
+cpu             AMD Ryzen 5 2600 Six-Core Processor
+logical cores   12
+memory          15.93 GB
+os              Windows
+
+workload        the plan below, run directly so no model is in the timing loop
+
+{"operations":[
+  {"type":"project","expr":"year(timestamp)","as":"year"},
+  {"type":"filter","predicate":"year == 2025"},
+  {"type":"group_by","columns":["country"]},
+  {"type":"aggregate","function":"sum","column":"amount","as":"revenue"},
+  {"type":"sort","column":"revenue","order":"desc"}]}
+
+notes
+  - Timings are the median of the repeat count above.
+  - Peak memory is sampled per run; the process wide counter only rises.
+  - The generator records the true sum, row count and extremes, so accuracy
+    columns compare against the data rather than against another engine run.
+  - 12.1 has two arms, not three: with a mock provider the AI proposal is
+    derived from the heuristics, so an AI-only arm needs a real adapter.

@@ -1,0 +1,25 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35707.178 d17.12
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "merope", "merope.vcxproj", "{149FB12E-D5D5-4FC0-8D60-0DE157BD4794}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+		Sanitize|x64 = Sanitize|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{149FB12E-D5D5-4FC0-8D60-0DE157BD4794}.Debug|x64.ActiveCfg = Debug|x64
+		{149FB12E-D5D5-4FC0-8D60-0DE157BD4794}.Debug|x64.Build.0 = Debug|x64
+		{149FB12E-D5D5-4FC0-8D60-0DE157BD4794}.Release|x64.ActiveCfg = Release|x64
+		{149FB12E-D5D5-4FC0-8D60-0DE157BD4794}.Release|x64.Build.0 = Release|x64
+		{149FB12E-D5D5-4FC0-8D60-0DE157BD4794}.Sanitize|x64.ActiveCfg = Sanitize|x64
+		{149FB12E-D5D5-4FC0-8D60-0DE157BD4794}.Sanitize|x64.Build.0 = Sanitize|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

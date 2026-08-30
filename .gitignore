@@ -1,0 +1,28 @@
+# Build output
+x64/
+.vs/
+*.user
+
+# Generated datasets and their cached schemas. Both locations: the README
+# serves and generates into ./data, which is the one that actually fills up.
+# The directories themselves are kept (.gitkeep) so --data works after a clone.
+data/*.csv
+data/*.tsv
+data/*.merope-schema.json
+data/*.json
+merope/data/*.csv
+merope/data/*.tsv
+merope/data/*.merope-schema.json
+merope/data/*.json
+
+# The datasets the benchmark generates are disposable and enormous.
+# The result CSVs and manifests under bench/run-* are the evidence: keep them.
+bench/data/
+
+# The model key, and the note it was pasted from. Neither is ever committed:
+# merope.ai.example.json is the copy that documents the shape without a key.
+secrets.md
+merope.ai.json
+
+# Working notes, kept locally and deliberately not published.
+dialogue.md
