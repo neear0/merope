@@ -1,5 +1,3 @@
-// dataset/sampler.h - takes a representative sample without reading the whole
-// file (spec 4.2).
 #pragma once
 
 #include "csv_format.h"

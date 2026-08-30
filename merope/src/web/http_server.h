@@ -1,4 +1,3 @@
-// web/http_server.h - a small HTTP/1.1 server (spec 7).
 #pragma once
 
 #include <atomic>

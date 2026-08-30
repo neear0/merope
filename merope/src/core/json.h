@@ -1,4 +1,3 @@
-// core/json.h - a small dependency free JSON DOM.
 #pragma once
 
 #include <cstdint>

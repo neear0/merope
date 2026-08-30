@@ -1,4 +1,3 @@
-// schema/schema.h - the unified schema (spec 4.6).
 #pragma once
 
 #include "../core/parse.h"

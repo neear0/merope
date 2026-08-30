@@ -1,4 +1,3 @@
-// ai/ai_provider.h - the only place the engine talks to a model (spec 8.1).
 #pragma once
 
 #include "../plan/query_plan.h"

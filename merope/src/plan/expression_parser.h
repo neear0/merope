@@ -1,5 +1,3 @@
-// plan/expression_parser.h - the lexer and recursive descent parser behind
-// parse_expression().
 #pragma once
 
 #include "expression.h"

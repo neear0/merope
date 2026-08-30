@@ -1,4 +1,3 @@
-// parallel/partitioner.h - splits the file into byte ranges for the workers.
 #pragma once
 
 #include "../dataset/csv_format.h"

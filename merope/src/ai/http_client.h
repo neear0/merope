@@ -1,5 +1,3 @@
-// ai/http_client.h - the only place in the process that opens a connection to
-// something that is not this machine.
 #pragma once
 
 #include <cstdint>

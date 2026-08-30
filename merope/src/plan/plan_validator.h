@@ -1,4 +1,3 @@
-// plan/plan_validator.h - the gate between the AI and the engine (spec 3.1, 5).
 #pragma once
 
 #include "../schema/schema.h"

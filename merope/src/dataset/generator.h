@@ -1,5 +1,3 @@
-// dataset/generator.h - synthetic datasets for the experiments in spec 12.
-// Deterministic for a given seed, so a measurement can be repeated exactly.
 #pragma once
 
 #include <cstddef>

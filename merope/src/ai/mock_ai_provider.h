@@ -1,4 +1,3 @@
-// ai/mock_ai_provider.h - the development and test provider.
 #pragma once
 
 #include "ai_provider.h"

@@ -1,5 +1,3 @@
-// schema/heuristic_inference.h - deterministic rules that run before the AI is
-// ever called (spec 4.4).
 #pragma once
 
 #include "data_profiler.h"

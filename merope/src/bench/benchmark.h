@@ -1,4 +1,3 @@
-// bench/benchmark.h - the experimental part of the specification (chapter 12).
 #pragma once
 
 #include <cstdint>

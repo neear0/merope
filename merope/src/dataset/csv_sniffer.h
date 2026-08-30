@@ -1,5 +1,3 @@
-// dataset/csv_sniffer.h - works out the practical properties of a file before
-// anything is sampled or profiled (spec 4.1).
 #pragma once
 
 #include "csv_format.h"

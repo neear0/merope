@@ -1,5 +1,3 @@
-// tests/self_test.cpp - the built in checks behind `merope selftest`.
-
 #include "self_test.h"
 
 #include "../src/app/cli.h"

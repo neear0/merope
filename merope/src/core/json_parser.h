@@ -1,4 +1,3 @@
-// core/json_parser.h - the recursive descent parser behind json_parse().
 #pragma once
 
 #include "json.h"

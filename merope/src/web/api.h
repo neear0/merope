@@ -1,4 +1,3 @@
-// web/api.h - the REST surface the browser talks to (spec 7).
 #pragma once
 
 #include "../ai/remote_ai_provider.h"

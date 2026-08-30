@@ -1,5 +1,3 @@
-// app/pipeline.h - wires the stages together the way the user workflow in
-// spec 13 describes, so the CLI and any future REST layer share one path.
 #pragma once
 
 #include "../ai/ai_provider.h"

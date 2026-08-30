@@ -1,5 +1,3 @@
-// plan/query_plan.h - the declarative plan the AI is allowed to produce
-// (spec 5). It never contains code, only named operations over named columns.
 #pragma once
 
 #include "../core/json.h"

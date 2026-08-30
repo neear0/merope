@@ -1,4 +1,3 @@
-// engine/chunk.h - the columnar batch the engine works on (spec 6.2).
 #pragma once
 
 #include "../core/types.h"

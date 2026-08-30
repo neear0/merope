@@ -1,5 +1,3 @@
-// merope - AI-assisted big data processing engine
-
 #include "app/cli.h"
 #include "app/pipeline.h"
 #include "bench/benchmark.h"

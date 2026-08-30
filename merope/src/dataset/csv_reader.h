@@ -1,4 +1,3 @@
-// dataset/csv_reader.h - streaming CSV access.
 #pragma once
 
 #include "../engine/chunk.h"

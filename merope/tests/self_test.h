@@ -1,4 +1,3 @@
-// tests/self_test.h - declarations for the built in check suite.
 #pragma once
 
 #include <cstdint>

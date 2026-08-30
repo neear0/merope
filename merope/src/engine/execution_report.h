@@ -1,5 +1,3 @@
-// engine/execution_report.h - what the engine reports back about a run
-// (spec 6.4). Every number here is measured, never estimated.
 #pragma once
 
 #include <atomic>

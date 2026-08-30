@@ -1,5 +1,3 @@
-// plan/expression.h - the expression language the AI is allowed to use inside
-// a plan. Deliberately tiny: comparisons, AND/OR, IN, BETWEEN, IS NULL, a few
 #pragma once
 
 #include "../core/types.h"

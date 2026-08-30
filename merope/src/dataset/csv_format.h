@@ -1,5 +1,3 @@
-// dataset/csv_format.h - the dialect a CSV file turned out to be written in,
-// plus the record splitter that every other stage goes through.
 #pragma once
 
 #include "encoding.h"

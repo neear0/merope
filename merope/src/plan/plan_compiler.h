@@ -1,5 +1,3 @@
-// plan/plan_compiler.h - the slot table and expression compiler used while
-// validating a plan.
 #pragma once
 
 #include "../core/parse.h"

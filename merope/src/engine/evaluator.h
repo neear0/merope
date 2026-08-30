@@ -1,5 +1,3 @@
-// engine/evaluator.h - evaluates a compiled expression over a whole chunk at a
-// time rather than row by row, which is the point of the columnar layout.
 #pragma once
 
 #include "../plan/expression.h"

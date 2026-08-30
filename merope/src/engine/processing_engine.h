@@ -1,4 +1,3 @@
-// engine/processing_engine.h - executes a validated physical plan (spec 6).
 #pragma once
 
 #include "../dataset/csv_reader.h"

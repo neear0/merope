@@ -1,5 +1,3 @@
-// core/parse.h - field level value recognition shared by the profiler and the
-// typed chunk reader. Nothing here knows column names; it only looks at text.
 #pragma once
 
 #include "types.h"

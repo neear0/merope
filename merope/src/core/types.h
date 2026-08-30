@@ -1,5 +1,3 @@
-// merope - AI-assisted big data processing engine
-// core/types.h - physical and semantic type system (spec chapter 4.7)
 #pragma once
 
 #include <cstddef>

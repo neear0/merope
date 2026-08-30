@@ -1,5 +1,3 @@
-// schema/data_profiler.h - per column statistics computed from the sample
-// (spec 4.3). Everything here is evidence; nothing here decides meaning.
 #pragma once
 
 #include "../core/parse.h"

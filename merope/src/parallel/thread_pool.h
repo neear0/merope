@@ -1,4 +1,3 @@
-// parallel/thread_pool.h - the projects own worker pool (spec 8).
 #pragma once
 
 #include <condition_variable>

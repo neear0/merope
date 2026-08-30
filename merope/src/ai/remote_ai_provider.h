@@ -1,4 +1,3 @@
-// ai/remote_ai_provider.h - the production adapter behind c_ai_provider.
 #pragma once
 
 #include "ai_provider.h"

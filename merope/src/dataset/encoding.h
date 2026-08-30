@@ -1,4 +1,3 @@
-// dataset/encoding.h - encoding detection and transcoding to UTF-8 (spec 4.1)
 #pragma once
 
 #include <cstddef>

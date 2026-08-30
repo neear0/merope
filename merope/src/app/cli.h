@@ -1,4 +1,3 @@
-// app/cli.h - the command line front end.
 #pragma once
 
 #include "../ai/remote_ai_provider.h"
